@@ -7,7 +7,8 @@ import time
 from typing import Optional
 
 from playwright.sync_api import Page, sync_playwright
-from utils import extract_keys, load_config, parse_args
+
+from . import utils
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -158,6 +159,7 @@ def extract_product_details(
 
     for attempt in range(5):
         try:
+            logger.info("[Attempt Number] - [%s]", attempt)
             page.goto(url, wait_until="domcontentloaded", timeout=60000)
             errors = []  # Reset errors for each attempt
 
@@ -225,11 +227,11 @@ def run_transformer():
 
     logger.info("Starting detail extraction script...")
 
-    args = parse_args()
+    args = utils.parse_args()
     os.makedirs(args.path, exist_ok=True)
 
-    config = load_config("configs.yml")
-    category_key, subcategory_key = extract_keys(args.path)
+    config = utils.load_config("configs.yml")
+    category_key, subcategory_key = utils.extract_keys(args.path)
 
     category = config[category_key]["name"]
     subcategory = config[category_key][subcategory_key]["name"]
