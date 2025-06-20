@@ -40,8 +40,15 @@ def build_args(
                 str(max_number),
             ]
         case "detail":
-            extract_file = format_filename(config["extract"]["file-name"], category_name)
-            args += ["--name", str(output_file), "--extract", str(folder_path / extract_file)]
+            extract_file = format_filename(
+                config["extract"]["file-name"], category_name
+            )
+            args += [
+                "--name",
+                str(output_file),
+                "--extract",
+                str(folder_path / extract_file),
+            ]
         case "clean":
             detail_file = format_filename(config["detail"]["file-name"], category_name)
             args += [
@@ -61,7 +68,9 @@ def parse_arguments():
     parser = ArgumentParser(description="Run Amazon data scraper pipeline.")
     parser.add_argument("--run_group", help="Main category group (e.g., pet-food).")
     parser.add_argument("--run_name", help="Subcategory under run_group.")
-    parser.add_argument("--run_mode", help="Stage to run (extract, detail, clean, load).")
+    parser.add_argument(
+        "--run_mode", help="Stage to run (extract, detail, clean, load)."
+    )
     parser.add_argument("--max", type=int, default=1, help="Maximum page number limit")
     return parser.parse_args()
 
@@ -78,7 +87,7 @@ def get_config_from_args_or_yaml(config, args):
     return run_group, sub_group["run-name"], sub_group["run-type"]
 
 
-def run_extract():
+def run_main():
     config = load_config("configs.yml")
     args = parse_arguments()
 
@@ -119,4 +128,4 @@ def run_extract():
 
 
 if __name__ == "__main__":
-    run_extract()
+    run_main()
