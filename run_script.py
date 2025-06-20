@@ -50,7 +50,9 @@ def build_args(
                 str(folder_path / extract_file),
             ]
         case "clean":
-            transform_file = format_filename(config["transform"]["file-name"], category_name)
+            transform_file = format_filename(
+                config["transform"]["file-name"], category_name
+            )
             args += [
                 "--name",
                 str(output_file),

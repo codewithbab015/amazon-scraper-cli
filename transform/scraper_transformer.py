@@ -7,7 +7,6 @@ import time
 from typing import Optional
 
 from playwright.sync_api import Page, sync_playwright
-
 from utils import extract_keys, load_config, parse_args
 
 logging.basicConfig(
@@ -34,8 +33,8 @@ def save_to_json(data: list, output_path: str) -> None:
 
 
 def wait_for_main_selectors(page: Page) -> None:
-    page.wait_for_selector("div#desktop-breadcrumbs_feature_div", timeout=5000)
-    page.wait_for_selector("div#ppd", timeout=5000)
+    page.wait_for_selector("div#desktop-breadcrumbs_feature_div", timeout=60000)
+    page.wait_for_selector("div#ppd", timeout=60000)
 
 
 def extract_category(page: Page) -> Optional[str]:
