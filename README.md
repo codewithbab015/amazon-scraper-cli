@@ -69,15 +69,16 @@ Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results
 ---
 
 ### ▶️ How to Run the Script
-##### 🧭 Workflow Overview
+#### 🧭 Workflow Overview
+
 
 ```mermaid
 flowchart TD
     A[Start] --> B[User runs CLI command via Taskfile]
     B --> C[Taskfile loads variables from CommonVars.yml]
-    C --> D{RUN_MODE == "extract"?}
-    D -- Yes --> E[Check if MAX is provided]
-    D -- No --> F[Run without MAX]
+    C --> D{RUN_MODE == extract}
+    D -->|Yes| E[Check if MAX is provided]
+    D -->|No| F[Run without MAX]
     E -->|MAX provided| G[Execute run_script.py with all args]
     E -->|MAX missing| H[Fail with error: MAX is required]
     F --> G
