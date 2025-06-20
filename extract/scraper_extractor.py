@@ -2,9 +2,9 @@ import json
 import logging
 import os
 import time
-from pathlib import Path
 from argparse import ArgumentParser
 from datetime import datetime
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
@@ -59,16 +59,18 @@ def extract_product_data(page, page_url, starting_index=1):
             href = link.get_attribute("href") if link else None
 
             if href:
-                details.update({
-                    "link": f"https://www.amazon.co.za{href}",
-                    "page_url": page_url,
-                    "marketplace_name": "www.amazon.co.za",
-                    "index": idx,
-                    "date_collected": today,
-                })
+                details.update(
+                    {
+                        "link": f"https://www.amazon.co.za{href}",
+                        "page_url": page_url,
+                        "marketplace_name": "www.amazon.co.za",
+                        "index": idx,
+                        "date_collected": today,
+                    }
+                )
                 product_data.append(details)
-        except Exception as e:
-            logger.warning(f"Skipping product #{idx} due to error: {e}")
+        except Exception as error:
+            logger.warning("Skipping product #%s due to error: %s", idx, error)
 
     return product_data
 
@@ -128,14 +130,16 @@ def build_url(template: str, page_index: int) -> str:
 def run_extractor():
     parser = ArgumentParser()
     parser.add_argument("--path", required=True, help="Output folder")
-    parser.add_argument("--name", required=True, help="Output filename (e.g. products.json)")
+    parser.add_argument(
+        "--name", required=True, help="Output filename (e.g. products.json)"
+    )
     parser.add_argument("--url", required=True, help="URL template with {page_index}")
     parser.add_argument("--min", type=int, default=1, help="Minimum page number")
     parser.add_argument("--max", type=int, help="Maximum page number limit")
 
     args = parser.parse_args()
     os.makedirs(args.path, exist_ok=True)
-    
+
     full_output_path = Path.cwd() / args.name
 
     with sync_playwright() as p:

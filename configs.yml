@@ -10,9 +10,9 @@ defaults: &default
   extract:
     file-name: !!str extract_{category_name}_data.json
     run-script: !!str extract/scraper_extractor.py
-  detail:
-    file-name: !!str detail_{category_name}_results.json
-    run-script: !!str scraper_detail.py
+  transform:
+    file-name: !!str transform_{category_name}_data.json
+    run-script: !!str transform/scraper_transformer.py
   clean:
     file-name: !!str amazoncoza_{category_name}_{timestamp}.csv
     run-script: !!str scraper_clean.py

@@ -39,7 +39,7 @@ def build_args(
                 "--max",
                 str(max_number),
             ]
-        case "detail":
+        case "transform":
             extract_file = format_filename(
                 config["extract"]["file-name"], category_name
             )
@@ -50,12 +50,12 @@ def build_args(
                 str(folder_path / extract_file),
             ]
         case "clean":
-            detail_file = format_filename(config["detail"]["file-name"], category_name)
+            transform_file = format_filename(config["transform"]["file-name"], category_name)
             args += [
                 "--name",
                 str(output_file),
-                "--detail",
-                str(folder_path / detail_file),
+                "--transform",
+                str(folder_path / transform_file),
             ]
         case "load":
             args += []
@@ -69,7 +69,7 @@ def parse_arguments():
     parser.add_argument("--run_group", help="Main category group (e.g., pet-food).")
     parser.add_argument("--run_name", help="Subcategory under run_group.")
     parser.add_argument(
-        "--run_mode", help="Stage to run (extract, detail, clean, load)."
+        "--run_mode", help="Stage to run (extract, transform, clean, load)."
     )
     parser.add_argument("--max", type=int, default=1, help="Maximum page number limit")
     return parser.parse_args()

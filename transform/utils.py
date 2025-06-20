@@ -15,7 +15,7 @@ def parse_args():
         required=True,
         help="Path to save results (should include category/subcategory)",
     )
-    parser.add_argument("--main", required=True, help="File name of previous run")
+    parser.add_argument("--extract", required=True, help="File name of previous run")
     parser.add_argument("--name", required=True, help="Output file name for results")
     return parser.parse_args()
 
