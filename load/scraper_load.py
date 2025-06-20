@@ -2,7 +2,7 @@ import json
 import logging
 import os
 from argparse import ArgumentParser
-
+from pathlib import Path
 import pandas as pd
 
 # Loggings
@@ -16,21 +16,21 @@ logger = logging.getLogger(__name__)
 def write_details_to_csv(df: pd.DataFrame, file_name: str) -> None:
     logger.info("Writing file to local file.")
     df.to_csv(file_name, index=False, encoding="utf-8")
-    logger.info("Process completed successfully.")
+    logger.info("Data '%s' written successfully.", file_name)
 
 
 def main() -> None:
     # CLI: Arguments
     parser = ArgumentParser()
     parser.add_argument("--path", help="File path or folder output to save new results")
-    parser.add_argument("--detail", help="File name from previous run")
+    parser.add_argument("--transform", help="File name from previous run")
     parser.add_argument("--name", help="File name to save results")
 
     args = parser.parse_args()
     os.makedirs(args.path, exist_ok=True)
 
     # Load product data from JSON file
-    with open(args.detail, encoding="utf-8") as f:
+    with open(args.transform, encoding="utf-8") as f:
         product_data = json.load(f)
 
     # Create a DataFrame from the loaded data
@@ -65,12 +65,19 @@ def main() -> None:
 
     # Reset index of the DataFrame
     df.drop("tags_with_errors", axis=1, inplace=True)
+    df.drop_duplicates(inplace=True)
     df.reset_index(drop=True, inplace=True)
 
+    print("Overall Missing Values: \n", (
+        df.isna()
+        .sum().reset_index(name='N/A Count')
+        .rename(columns={"index":'Column Names'})
+    ))
     # Data Overview
     print(f"Total records: {len(df)}")
     print(df.head())
     # print(df.columns)
+
     write_details_to_csv(df, args.name)
 
 

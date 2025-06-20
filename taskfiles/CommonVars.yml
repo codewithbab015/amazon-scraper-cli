@@ -1,0 +1,18 @@
+---
+version: '3'
+
+vars:
+    RUN_GROUP: '{{.RUN_GROUP | default "electronics"}}'
+    RUN_TYPE: '{{.RUN_TYPE | default "camera-photo"}}'
+    RUN_MODE: '{{.RUN_MODE | default "extract"}}'
+    MAX: '{{.MAX | default ""}}'
+    
+tasks:
+  run-vars:
+    internal: true
+    preconditions:
+          - sh: |
+              if [ "{{.RUN_MODE}}" = "extract" ] && [ -z "{{.MAX}}" ]; then
+                echo "Error: --max must be set when RUN_MODE is 'extract'"
+                exit 1
+              fi

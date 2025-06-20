@@ -49,7 +49,7 @@ def build_args(
                 "--extract",
                 str(folder_path / extract_file),
             ]
-        case "clean":
+        case "load":
             transform_file = format_filename(
                 config["transform"]["file-name"], category_name
             )
@@ -59,7 +59,7 @@ def build_args(
                 "--transform",
                 str(folder_path / transform_file),
             ]
-        case "load":
+        case "upload":
             args += []
         case _:
             print("Unsupported run_mode: %s", run_mode)
@@ -105,13 +105,14 @@ def run_main():
     folder_path = Path("data") / run_group / run_name
 
     # Compose output file
-    timestamp = (
-        datetime.now().strftime("%Y%m%d_%H%M%S") if run_mode == "clean" else None
-    )
+    mode = "load"
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S") if run_mode == mode else None
+    print(timestamp)
     output_file = folder_path / format_filename(
         run_type_config["file-name"], category_name, timestamp
     )
-    output_file_name = category_name if run_mode == "load" else output_file
+
+    output_file_name = category_name if run_mode != mode else output_file
     # print(output_file_name)
     # Build and execute script arguments
     script_path = run_type_config["run-script"]

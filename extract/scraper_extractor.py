@@ -18,9 +18,10 @@ logger = logging.getLogger(__name__)
 
 def normalize_price(price: str) -> tuple:
     currency, amount = price.split(maxsplit=1)
-    major, minor = amount.split(',')
-    normalized = float(re.sub(r'\s+', '', major) + '.' + minor)
+    major, minor = amount.split(",")
+    normalized = float(re.sub(r"\s+", "", major) + "." + minor)
     return currency, normalized
+
 
 def mainpage_product_details(html: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")

@@ -1,0 +1,18 @@
+---
+version: '3'
+
+includes:
+  common: 
+    taskfile: ./CommonVars.yml
+    internal: true
+tasks:
+  run:
+    desc: Run ETL locally and save cleaned data to the local data folder
+    deps: [common:run-vars]
+    cmds:
+      - |
+        python run_script.py 
+        --run_group {{.common.RUN_GROUP}} 
+        --run_name {{.common.RUN_TYPE}}
+        --run_mode {{.common.RUN_MODE}} {{if eq .common.RUN_MODE "extract"}}
+        --max {{.common.MAX}}{{end}}

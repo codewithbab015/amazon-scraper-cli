@@ -13,10 +13,10 @@ defaults: &default
   transform:
     file-name: !!str transform_{category_name}_data.json
     run-script: !!str transform/scraper_transformer.py
-  clean:
-    file-name: !!str amazoncoza_{category_name}_{timestamp}.csv
-    run-script: !!str scraper_clean.py
   load:
+    file-name: !!str loaded_amazoncoza_{category_name}_{timestamp}.csv
+    run-script: !!str load/scraper_load.py
+  upload:
     file-name: !!str ""
     run-script: !!str scraper_data_loader.py
 
