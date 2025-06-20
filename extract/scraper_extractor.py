@@ -1,6 +1,7 @@
 import json
 import logging
 import os
+import re
 import time
 from argparse import ArgumentParser
 from datetime import datetime
@@ -14,6 +15,12 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+
+def normalize_price(price: str) -> tuple:
+    currency, amount = price.split(maxsplit=1)
+    major, minor = amount.split(',')
+    normalized = float(re.sub(r'\s+', '', major) + '.' + minor)
+    return currency, normalized
 
 def mainpage_product_details(html: str) -> dict:
     soup = BeautifulSoup(html, "html.parser")
@@ -30,8 +37,8 @@ def mainpage_product_details(html: str) -> dict:
         price_tag = soup.select_one(".a-price .a-offscreen")
         if price_tag:
             price_text = price_tag.get_text(strip=True)
-            parts = price_text.split()
-            currency, price = parts if len(parts) == 2 else ("", parts[0])
+            currency, price = normalize_price(price_text)
+            print("PRICE TEXT: ", price)
         else:
             currency, price = None, None
     except Exception:

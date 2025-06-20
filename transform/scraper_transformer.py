@@ -6,9 +6,8 @@ import sys
 import time
 from typing import Optional
 
+import utils
 from playwright.sync_api import Page, sync_playwright
-
-from . import utils
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
@@ -159,7 +158,7 @@ def extract_product_details(
 
     for attempt in range(5):
         try:
-            logger.info("[Attempt Number] - [%s]", attempt)
+            logger.info("Attempt Number - [%s]", attempt + 1)
             page.goto(url, wait_until="domcontentloaded", timeout=60000)
             errors = []  # Reset errors for each attempt
 
