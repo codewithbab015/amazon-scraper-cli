@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres-db
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root123
+      POSTGRES_DB: datadb
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - pg-network
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin-ui
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: tekgameus@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: root123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - pg-network
+
+  amazon-scraper:
+    image: mrbaloyin/amazon-scraper-vi:1.2.0
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile
+    container_name: amazon-scraper-container
+    restart: "no"
+    depends_on:
+      - postgres
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: datadb
+      DB_USER: root
+      DB_PASSWORD: root123
+    volumes:
+      - ./data:/app/data
+    command: ["--run_group", "pet-food", "--run_name", "ground-coffee", "--run_mode", "load"]
+    networks:
+      - pg-network
+
+volumes:
+  postgres_data:
+
+networks:
+  pg-network:

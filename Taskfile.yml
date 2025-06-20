@@ -1,0 +1,54 @@
+version: '3'
+
+vars:
+  DOCKER_USER: mrbaloyin
+  IMAGE_NAME: amazon-scraper-vi
+  VERSION: '{{.VERSION | default "1.0.0"}}'
+  TAG: '{{.DOCKER_USER}}/{{.IMAGE_NAME}}:{{.VERSION}}'
+
+tasks:
+
+  default:
+    cmds:
+      - task --list
+    silent: true
+
+  build:
+    desc: Build Docker image
+    cmds:
+      - docker buildx build -t {{.TAG}} .
+  build-load:
+    desc: Build Docker image and load into Docker image store
+    cmds:
+      - docker buildx build --load -t {{.TAG}} .
+
+  run:
+    desc: Run Docker container
+    cmds:
+      - docker run --rm -v "${PWD}/data:/app/data" {{.TAG}} --run_group "{{.RUN_GROUP}}" --run_name "{{.RUN_NAME}}" --run_mode "{{.RUN_MODE}}"
+    vars:
+      RUN_NAME: '{{.RUN_NAME | default "ground-coffee"}}'
+      RUN_MODE: '{{.RUN_MODE | default "main"}}'
+  run-load:
+    vars:
+      RUN_NAME: '{{.RUN_NAME | default "ground-coffee"}}'
+      COMPOSE_TAG: '{{.COMPOSE_TAG | default "amazon-scraper"}}'
+    cmds:
+      - docker compose up --remove-orphans --no-start
+      - docker compose run --rm {{.COMPOSE_TAG}} --run_group "{{.RUN_GROUP}}" --run_name "{{.RUN_NAME}}" --run_mode "{{.RUN_MODE}}"
+  login:
+    desc: Login to Docker Hub
+    cmds:
+      - docker login
+
+  push:
+    desc: Push Docker image to Docker Hub
+    cmds:
+      - docker push {{.TAG}}
+
+  all:
+    desc: Build, run, and push
+    cmds:
+      - task: build
+      - task: run
+      - task: push

@@ -1,0 +1,36 @@
+# --- Change Vars ----
+run-group: !!str electronics
+amazon_data_scraper: &amazon_data_scraper
+  run-name: !!str camera-photo
+  run-type: !!str extract
+
+# --- Default Template ---
+defaults: &default
+  min_page_index: !!str 1
+  extract:
+    file-name: !!str extract_{category_name}_data.json
+    run-script: !!str extract/scraper_extractor.py
+  detail:
+    file-name: !!str detail_{category_name}_results.json
+    run-script: !!str scraper_detail.py
+  clean:
+    file-name: !!str amazoncoza_{category_name}_{timestamp}.csv
+    run-script: !!str scraper_clean.py
+  load:
+    file-name: !!str ""
+    run-script: !!str scraper_data_loader.py
+
+# --- Electronics Category ---
+electronics:
+  name: !!str Electronics
+  <<: *amazon_data_scraper
+  camera-photo:
+    name: !!str Camera & Photo
+    <<: *default
+    url_template: !!str https://www.amazon.co.za/s?i=electronics&rh=n%3A28034765031&s=popularity-rank&fs=true&page={page_index}&xpid=fCSbRWnd8cea8&qid=1750423778&ref=sr_pg_{page_index}
+
+  headphones-earbuds-accessory:
+    name: !!str Headphones, Earbuds & Accessories
+    <<: *default
+    url_template: !!str https://www.amazon.co.za/s?i=electronics&rh=n%3A28034761031&s=popularity-rank&fs=true&page={page_index}&qid=1750425462&xpid=sumlClfMQTKfk&ref=sr_pg_{page_index}
+ 
