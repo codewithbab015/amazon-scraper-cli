@@ -69,6 +69,21 @@ Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results
 ---
 
 ### ▶️ How to Run the Script
+##### 🧭 Workflow Overview
+
+```mermaid
+flowchart TD
+    A[Start] --> B[User runs CLI command via Taskfile]
+    B --> C[Taskfile loads variables from CommonVars.yml]
+    C --> D{RUN_MODE == "extract"?}
+    D -- Yes --> E[Check if MAX is provided]
+    D -- No --> F[Run without MAX]
+    E -->|MAX provided| G[Execute run_script.py with all args]
+    E -->|MAX missing| H[Fail with error: MAX is required]
+    F --> G
+    G --> I[Cleaned data is saved to /data folder]
+    I --> J[End]
+```
 
 To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev/).
 
@@ -87,16 +102,4 @@ To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev
 # Recommended Taskfile-based execution:
 task cli-runner:run RUN_GROUP="electronics" RUN_NAME="camera-photo" RUN_MODE="extract" MAX=1
 ```
-
-flowchart TD
-    A[Start] --> B[User runs CLI command via Taskfile]
-    B --> C[Taskfile loads variables from CommonVars.yml]
-    C --> D{RUN_MODE == "extract"?}
-    D -- Yes --> E[Check if MAX is provided]
-    D -- No --> F[Run without MAX]
-    E -->|MAX provided| G[Execute run_script.py with all args]
-    E -->|MAX missing| H[Fail with error: MAX is required]
-    F --> G
-    G --> I[Cleaned data is saved to /data folder]
-    I --> J[End]
 
