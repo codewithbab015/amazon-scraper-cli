@@ -136,7 +136,7 @@ def run_extractor():
     args = parser.parse_args()
     os.makedirs(args.path, exist_ok=True)
     
-    full_output_path = Path.cwd() / f'{args.path}/{args.name}'
+    full_output_path = Path.cwd() / args.name
 
     with sync_playwright() as p:
         browser = p.firefox.launch(headless=True)
