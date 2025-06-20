@@ -6,12 +6,12 @@
 
 ```bash
 python -m venv .venv
-````
+```
 
 ### ⚡ Activate Python Runtime Environment
 
 ```bash
-    source .venv/bin/activate
+source .venv/bin/activate
 ```
 
 ### 📦 Install Python Packages
@@ -40,19 +40,19 @@ Each run is configured via the `configs.yml` file with the following fields:
 
 | Field       | Description                                                       |
 | ----------- | ----------------------------------------------------------------- |
-| `run_group` | Logical group name for related scraping jobs                      |
-| `run_name`  | Specific scraping job within the group                            |
-| `run_type`  | Determines which script to execute (`extract`, `detail`, or `clean`) |
+| `run_group` | Logical group name for related scraping jobs                     |
+| `run_name`  | Specific scraping job within the group                           |
+| `run_type`  | Determines which script to execute (`extract`, `transform`, or `load`) |
 
 ---
 
 ### 🧭 Script Responsibilities
 
-| `run_type` | Script              | Description                                                                                       |
-| ---------- | ------------------- | ------------------------------------------------------------------------------------------------- |
-| `extract`     | `scraper_extractor.py`   | Scrapes data from the marketplace website and stores it in a JSON file                            |
-| `detail`   | `scraper_detail.py` | Loads the JSON output from the `extract` run, scrapes detailed data, and saves it to a new JSON file |
-| `clean`    | `scraper_clean.py`  | Cleans the data collected by `detail` and exports it as a timestamped CSV file                    |
+| `run_type`  | Script                           | Description                                                                                         |
+| ----------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `extract`   | `extract/scraper_extractor.py`   | Scrapes data from the marketplace website and stores it in a JSON file                             |
+| `transform` | `transform/scraper_transform.py` | Loads the JSON output from the `extract` run, scrapes detailed data, and saves it to a new JSON file |
+| `load`      | `load/scraper_load.py`          | Cleans the data collected by `transform` and exports it as a timestamped CSV file                  |
 
 ---
 
@@ -61,9 +61,9 @@ Each run is configured via the `configs.yml` file with the following fields:
 Scripts must be executed in the following order due to data dependencies:
 
 ```text
-Step 1: scraper_main.py   → Collects initial high-level data  
-Step 2: scraper_detail.py → Uses output from Step 1 to add detailed data  
-Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results  
+Step 1: scraper_extractor.py   → Collects initial high-level data
+Step 2: scraper_transform.py   → Uses output from Step 1 to add detailed data
+Step 3: scraper_load.py        → Uses output from Step 2 to clean and save results
 ```
 
 ---
@@ -72,9 +72,9 @@ Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results
 
 To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev/).
 
-- `MAX` maps to the `--max` argument inside `Taskfile.yml`.
-- ⚠️ **Note**: `MAX` is required when `RUN_MODE` is set to `"extract"`; otherwise, it can remain empty.
-- Python CLI arguments are defined and managed via the Taskfile.
+- `MAX` maps to the `--max` argument inside `Taskfile.yml`
+- ⚠️ **Note**: `MAX` is required when `RUN_MODE` is set to `"extract"`; otherwise, it can remain empty
+- Python CLI arguments are defined and managed via the Taskfile
 - The Taskfile command for running the Python script via the CLI is shown below:
 
 ```bash

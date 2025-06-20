@@ -1,0 +1,42 @@
+site_name: Web Scraping Pipeline
+site_description: Modular Web Scraping Pipeline with Extract-Transform-Load architecture
+site_author: Nhlanhla
+repo_url: https://github.com/codewithbab015/amazon-scraper-cli
+site_url: https://codewithbab015.github.io/amazon-scraper-cli/
+
+theme:
+  name: material
+  language: en
+  palette:
+    - scheme: default
+      primary: deep purple
+      accent: lime
+  features:
+    - navigation.expand
+    - navigation.top
+    - toc.integrate
+    - content.code.copy
+    - content.code.annotate
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - codehilite
+  - admonition
+  - pymdownx.superfences
+  - pymdownx.details
+  - pymdownx.tabbed
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.emoji
+  - pymdownx.keys
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+plugins:
+  - search
