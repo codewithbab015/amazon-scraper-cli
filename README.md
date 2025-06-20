@@ -68,12 +68,35 @@ Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results
 
 ---
 
-### ▶️ How to Run a Script
+### ▶️ How to Run the Script
 
-To run the pipeline, use the following command and change the `--run_mode` as needed (`main`, `detail`, or `clean`):
+To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev/).
 
-- `--max`: Specifies the maximum number of pages to scrape from the website. (Only applies when `run_mode` is `extract`)
+- `MAX` maps to the `--max` argument inside `Taskfile.yml`.
+- ⚠️ **Note**: `MAX` is required when `RUN_MODE` is set to `"extract"`; otherwise, it can remain empty.
+- Python CLI arguments are defined and managed via the Taskfile.
+- The Taskfile command for running the Python script via the CLI is shown below:
 
 ```bash
-python run_script.py --run_group "electronics" --run_name "camera-photo" --run_mode "extract" --max 1
+# You can also run the Python script directly, if preferred.
+# Make sure to check `configs.yml` and provide valid values for:
+# --run_group, --run_name, --run_mode, and --max (if applicable).
+# Example:
+# python run_script.py --run_group "electronics" --run_name "camera-photo" --run_mode "extract" --max 1
+
+# Recommended Taskfile-based execution:
+task cli-runner:run RUN_GROUP="electronics" RUN_NAME="camera-photo" RUN_MODE="extract" MAX=1
 ```
+
+flowchart TD
+    A[Start] --> B[User runs CLI command via Taskfile]
+    B --> C[Taskfile loads variables from CommonVars.yml]
+    C --> D{RUN_MODE == "extract"?}
+    D -- Yes --> E[Check if MAX is provided]
+    D -- No --> F[Run without MAX]
+    E -->|MAX provided| G[Execute run_script.py with all args]
+    E -->|MAX missing| H[Fail with error: MAX is required]
+    F --> G
+    G --> I[Cleaned data is saved to /data folder]
+    I --> J[End]
+
