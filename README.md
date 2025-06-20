@@ -69,22 +69,6 @@ Step 3: scraper_clean.py  → Uses output from Step 2 to clean and save results
 ---
 
 ### ▶️ How to Run the Script
-#### 🧭 Workflow Overview
-
-
-```mermaid
-flowchart TD
-    A[Start] --> B[User runs CLI command via Taskfile]
-    B --> C[Taskfile loads variables from CommonVars.yml]
-    C --> D{RUN_MODE == extract}
-    D -->|Yes| E[Check if MAX is provided]
-    D -->|No| F[Run without MAX]
-    E -->|MAX provided| G[Execute run_script.py with all args]
-    E -->|MAX missing| H[Fail with error: MAX is required]
-    F --> G
-    G --> I[Cleaned data is saved to /data folder]
-    I --> J[End]
-```
 
 To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev/).
 
@@ -104,3 +88,32 @@ To run the pipeline from the command line, use a [Taskfile](https://taskfile.dev
 task cli-runner:run RUN_GROUP="electronics" RUN_NAME="camera-photo" RUN_MODE="extract" MAX=1
 ```
 
+#### 🧭 Run Pipeline Overview (CLI)
+
+```mermaid
+flowchart TD
+    %% Define styles for modern look
+    classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
+    classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
+    classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
+    classDef success fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px,color:#000
+    classDef error fill:#ffebee,stroke:#c62828,stroke-width:2px,color:#000
+    
+    %% Main flow
+    A[🚀 Start] --> B[👤 User runs CLI command via Taskfile]
+    B --> C[📋 Taskfile loads commands and variables from both RunCLI.yml and CommonVars.yml]
+    C --> D{🔍 RUN_MODE == extract}
+    D -->|✅ Yes| E[🔢 Check if MAX is provided]
+    D -->|❌ No| F[▶️ Run without MAX]
+    E -->|🎯 MAX provided| G[⚡ Execute run_script.py with all args]
+    E -->|⚠️ MAX missing| H[❌ Fail with error: MAX is required]
+    F --> G
+    G --> I[💾 Cleaned data is saved to /data folder]
+    I --> J[🎉 End]
+    
+    %% Apply styles
+    class A,J startEnd
+    class B,C,F,G,I process
+    class D,E decision
+    class H error
+```
