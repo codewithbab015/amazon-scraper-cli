@@ -315,6 +315,15 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#activate-the-virtual-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      ⚡ Activate the Virtual Environment
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#install-required-python-packages" class="md-nav__link">
     <span class="md-ellipsis">
       📦 Install Required Python Packages
@@ -372,14 +381,20 @@
     </span>
   </a>
   
-</li>
+    <nav class="md-nav" aria-label="▶️ Running the Pipeline">
+      <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#cli-based-execution-flow-mermaid-diagram" class="md-nav__link">
+  <a href="#run-pipeline-overview-cli" class="md-nav__link">
     <span class="md-ellipsis">
-      🧭 CLI-Based Execution Flow (Mermaid Diagram)
+      🧭 Run Pipeline Overview (CLI)
     </span>
   </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
         
@@ -428,12 +443,9 @@
 <h2 id="project-setup">🛠️ Project Setup<a class="headerlink" href="#project-setup" title="Permanent link">&para;</a></h2>
 <h3 id="create-python-virtual-environment">🐍 Create Python Virtual Environment<a class="headerlink" href="#create-python-virtual-environment" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
-<span class="sb">````</span>
-
-<span class="c1">### ⚡ Activate the Virtual Environment</span>
-
-<span class="sb">```</span>bash
-<span class="nb">source</span><span class="w"> </span>.venv/bin/activate
+</code></pre></div>
+<h3 id="activate-the-virtual-environment">⚡ Activate the Virtual Environment<a class="headerlink" href="#activate-the-virtual-environment" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><span class="nb">source</span><span class="w"> </span>.venv/bin/activate
 </code></pre></div>
 <h3 id="install-required-python-packages">📦 Install Required Python Packages<a class="headerlink" href="#install-required-python-packages" title="Permanent link">&para;</a></h3>
 <div class="highlight"><pre><span></span><code><span class="c1"># Upgrade pip</span>
@@ -529,9 +541,9 @@ task<span class="w"> </span>cli-runner:run<span class="w"> </span><span class="s
 <span class="w">  </span><span class="nv">MAX</span><span class="o">=</span><span class="m">1</span>
 </code></pre></div>
 <hr />
-<h3 id="cli-based-execution-flow-mermaid-diagram">🧭 CLI-Based Execution Flow (Mermaid Diagram)<a class="headerlink" href="#cli-based-execution-flow-mermaid-diagram" title="Permanent link">&para;</a></h3>
+<h4 id="run-pipeline-overview-cli">🧭 Run Pipeline Overview (CLI)<a class="headerlink" href="#run-pipeline-overview-cli" title="Permanent link">&para;</a></h4>
 <div class="highlight"><pre><span></span><code>flowchart TD
-    %% Node styles
+    %% Define styles for modern look
     classDef startEnd fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#000
     classDef process fill:#f3e5f5,stroke:#4a148c,stroke-width:2px,color:#000
     classDef decision fill:#fff3e0,stroke:#e65100,stroke-width:2px,color:#000
@@ -540,17 +552,17 @@ task<span class="w"> </span>cli-runner:run<span class="w"> </span><span class="s
 
     %% Main flow
     A[🚀 Start] --&gt; B[👤 User runs CLI command via Taskfile]
-    B --&gt; C[📋 Taskfile loads variables from RunCLI.yml &amp; CommonVars.yml]
-    C --&gt; D{🔍 RUN_MODE == &quot;extract&quot;}
+    B --&gt; C[📋 Taskfile loads commands and variables from both RunCLI.yml and CommonVars.yml]
+    C --&gt; D{🔍 RUN_MODE == extract}
     D --&gt;|✅ Yes| E[🔢 Check if MAX is provided]
-    D --&gt;|❌ No| F[▶️ Proceed without MAX]
-    E --&gt;|🎯 MAX provided| G[⚡ Execute run_script.py with arguments]
-    E --&gt;|⚠️ MAX missing| H[❌ Error: MAX is required]
+    D --&gt;|❌ No| F[▶️ Run without MAX]
+    E --&gt;|🎯 MAX provided| G[⚡ Execute run_script.py with all args]
+    E --&gt;|⚠️ MAX missing| H[❌ Fail with error: MAX is required]
     F --&gt; G
-    G --&gt; I[💾 Save cleaned data to /data folder]
+    G --&gt; I[💾 Cleaned data is saved to /data folder]
     I --&gt; J[🎉 End]
 
-    %% Styling
+    %% Apply styles
     class A,J startEnd
     class B,C,F,G,I process
     class D,E decision
@@ -562,7 +574,7 @@ task<span class="w"> </span>cli-runner:run<span class="w"> </span><span class="s
 pip<span class="w"> </span>install<span class="w"> </span>mkdocs-material
 
 <span class="c1"># Step 2: Serve locally</span>
-mkdocs<span class="w"> </span>serve
+mkdocs<span class="w"> </span>serve<span class="w"> </span>-a<span class="w"> </span>localhost:8001
 
 <span class="c1"># Step 3: Deploy to GitHub Pages</span>
 mkdocs<span class="w"> </span>gh-deploy
